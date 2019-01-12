@@ -8,12 +8,14 @@ const _ = require('underscore');
 
 //librerias propias
 const Usuario = require('../model/user'); //Se pone con U mayuscula por estandar
+const { verificaToken } = require('../middleware/authentication');
 
 const app = express();
 
 /**
  * GET de /usuario es para regresar la lista de usuarios que estan en el mongoDB
  *      dados de alta.
+ * verificaToken: es el middleware que se ejecuta al querer llamar la función.
  * req.query: Trae las variables opcionales, posiblemente traera las variables
  *            opcionales.
  *            - desde: Es el valor de inicio de la respuesta, debe de ser numerico, 
@@ -21,7 +23,7 @@ const app = express();
  *            - limite: Es el valor de número de elementos por respuesta, debe de 
  *                      ser numerico, el valor de default es 5.
  */
-app.get('/usuario', function(req, res) {
+app.get('/usuario', verificaToken, function(req, res) {
     let desde = req.query.desde || 0;
     desde = Number(desde);
 

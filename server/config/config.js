@@ -9,6 +9,20 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 process.env.PORT = process.env.PORT || 3000;
 
 //==========================================
+//           VENCIMIENTO DEL TOKEN
+//           60 segundos
+//           60 minutos
+//           24 horas
+//           30 días
+//==========================================
+process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 30;
+
+//==========================================
+//           SEMILLA PARA EL TOKEN
+//==========================================
+process.env.SEMILLA_TOKEN = process.env.SEMILLA_TOKEN || 'esta-es-la-semilla-desarrollo';
+
+//==========================================
 //           BASE DE DATOS
 //==========================================
 let urlDB;

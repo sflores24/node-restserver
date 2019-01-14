@@ -13,7 +13,9 @@ let verificaToken = (req, res, next) => {
         if (err) {
             return res.status(401).json({
                 ok: false,
-                err: err
+                err: {
+                    message: 'Token invalido'
+                }
             });
         }
 
@@ -22,6 +24,20 @@ let verificaToken = (req, res, next) => {
     });
 };
 
+let verificaAdminRole = (req, res, next) => {
+    if (req.usuario.role !== 'ADMIN_ROLE') {
+        return res.status(401).json({
+            ok: false,
+            err: {
+                message: 'Privilegios insuficientes'
+            }
+        });
+    }
+
+    next();
+}
+
 module.exports = {
-    verificaToken
+    verificaToken,
+    verificaAdminRole
 }

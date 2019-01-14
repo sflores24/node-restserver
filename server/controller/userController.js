@@ -8,7 +8,7 @@ const _ = require('underscore');
 
 //librerias propias
 const Usuario = require('../model/user'); //Se pone con U mayuscula por estandar
-const { verificaToken } = require('../middleware/authentication');
+const { verificaToken, verificaAdminRole } = require('../middleware/authentication');
 
 const app = express();
 
@@ -63,7 +63,7 @@ app.get('/usuario', verificaToken, function(req, res) {
  *           regresa.
  * role: El role solo puede ser USER_ROLE, ADMIN_ROLE y por defecto es USER_ROLE
  */
-app.post('/usuario', function(req, res) {
+app.post('/usuario', [verificaToken, verificaAdminRole], function(req, res) {
     let body = req.body;
 
     let usuario = new Usuario({
@@ -97,7 +97,7 @@ app.post('/usuario', function(req, res) {
  *      este.  A su vez estamos sobre escribiendo el valor de body.password
  *      para que no se vaya sin hashear a la bd.
  */
-app.put('/usuario/:id', function(req, res) {
+app.put('/usuario/:id', [verificaToken, verificaAdminRole], function(req, res) {
     let id = req.params.id;
 
     //Otra manera de quitar campos sin tener que hacer el delete
@@ -134,7 +134,7 @@ app.put('/usuario/:id', function(req, res) {
  * DELETE /usuario/:id el borrado del usuario con respecto al id
  * :id es el identificador del usuario a eliminar
  */
-app.delete('/usuario/:id', function(req, res) {
+app.delete('/usuario/:id', [verificaToken, verificaAdminRole], function(req, res) {
     let id = req.params.id;
     let cambiaEstado = {
         estado: false

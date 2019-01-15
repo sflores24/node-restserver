@@ -100,7 +100,9 @@ app.post('/googleLgn', async(req, res) => {
         }
 
         if (generateToken) {
-            let token = generateToken(usuarioDB);
+            let token = jwt.sign({
+                usuario: usuarioDB
+            }, process.env.SEMILLA_TOKEN, { expiresIn: process.env.CADUCIDAD_TOKEN });
 
             return res.json({
                 ok: true,
@@ -109,17 +111,7 @@ app.post('/googleLgn', async(req, res) => {
             });
         }
     });
-
-    res.json({
-        usuario: googleUser
-    });
 });
-
-function generateToken(usuarioDB) {
-    return jwt.sign({
-        usuario: usuarioDB
-    }, process.env.SEMILLA_TOKEN, { expiresIn: process.env.CADUCIDAD_TOKEN });
-}
 
 /**
  * POST de /login para obtener token de logeado
@@ -154,7 +146,9 @@ app.post('/login', (req, res) => {
             });
         }
 
-        let token = generateToken(usuarioDB);
+        let token = jwt.sign({
+            usuario: usuarioDB
+        }, process.env.SEMILLA_TOKEN, { expiresIn: process.env.CADUCIDAD_TOKEN });
 
         res.json({
             ok: true,

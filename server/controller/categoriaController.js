@@ -15,10 +15,12 @@ app.get('/categoria', verificaToken, (req, res) => {
     let desde = req.query.desde || 0;
     desde = Number(desde);
 
-    let limite = req.query.limite || 5;
+    let limite = req.query.limite || 10;
     limite = Number(limite);
 
     Categoria.find()
+        .sort('descripcion')
+        .populate('usuario', 'nombre email')
         .skip(desde) //Salta 5 registros
         .limit(limite) //Regresa solo 5 registros
         .exec((err, categoriasDB) => {
@@ -91,7 +93,9 @@ app.post('/categoria', verificaToken, (req, res) => {
         if (!categoriaDB) {
             return res.status(400).json({
                 ok: false,
-                err
+                err: {
+                    message: 'No se pudo generar la categoria'
+                }
             });
         }
 

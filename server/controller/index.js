@@ -3,6 +3,7 @@
 const express = require('express');
 const app = express();
 
+app.use(require('./imagenesController'));
 app.use(require('./uploadController'));
 app.use(require('./productoController'));
 app.use(require('./categoriaController'));

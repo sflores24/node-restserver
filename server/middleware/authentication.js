@@ -24,6 +24,24 @@ let verificaToken = (req, res, next) => {
     });
 };
 
+let verificaTokenURL = (req, res, next) => {
+    let token = req.query.token;
+
+    jwt.verify(token, process.env.SEMILLA_TOKEN, (err, decodedInfo) => {
+        if (err) {
+            return res.status(401).json({
+                ok: false,
+                err: {
+                    message: 'Token invalido'
+                }
+            });
+        }
+
+        req.usuario = decodedInfo.usuario;
+        next();
+    });
+};
+
 let verificaAdminRole = (req, res, next) => {
     if (req.usuario.role !== 'ADMIN_ROLE') {
         return res.status(401).json({
@@ -39,5 +57,6 @@ let verificaAdminRole = (req, res, next) => {
 
 module.exports = {
     verificaToken,
-    verificaAdminRole
+    verificaAdminRole,
+    verificaTokenURL
 }
